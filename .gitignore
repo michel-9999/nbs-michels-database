@@ -1,0 +1,121 @@
+# -----------------------------------------------------------------------------
+# Custom .gitignore for nbs-michels-database
+# Visual Studio 2026 / C# / WinForms / .NET Windows app
+# -----------------------------------------------------------------------------
+# IMPORTANT:
+# This file intentionally keeps WinForms Designer files tracked:
+#   *.cs
+#   *.Designer.cs
+#   *.resx
+#   *.csproj
+#   *.sln / *.slnx
+#   Properties/Resources.resx
+#   Properties/Resources.Designer.cs
+# -----------------------------------------------------------------------------
+
+# Visual Studio local workspace/cache
+.vs/
+
+# Visual Studio user-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+*.slnx.docstates
+
+# Build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+[Bb]uild/
+[Bb]uilds/
+[Ll]og/
+[Ll]ogs/
+
+# .NET / MSBuild generated files
+*.binlog
+*.pdb
+*.ilk
+*.obj
+*.iobj
+*.ipdb
+*.cache
+*.tlog
+*.lastbuildstate
+*.generated.cs
+*.g.cs
+*.g.i.cs
+
+# NuGet generated/cache/package files
+*.nupkg
+*.snupkg
+packages/
+project.assets.json
+project.nuget.cache
+*.nuget.g.props
+*.nuget.g.targets
+*.nuget.dgspec.json
+
+# Test results / coverage
+TestResults/
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+
+# Publish output
+publish/
+PublishProfiles/
+*.pubxml
+*.publishproj
+
+# Local database files, if you test with local DBs later
+*.mdf
+*.ldf
+*.ndf
+*.db-shm
+*.db-wal
+*.sqlite-shm
+*.sqlite-wal
+
+# OS junk
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Editor folders, optional
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# -----------------------------------------------------------------------------
+# Explicit keep rules for this WinForms project
+# These protect the files Visual Studio needs for the Form Designer.
+# -----------------------------------------------------------------------------
+!nbs-michels-database.slnx
+!nbs-michels-database.sln
+!nbs-michels-database.csproj
+
+!Program.cs
+!DataObjects.cs
+!MainForm.cs
+!MainForm.Designer.cs
+!MainForm.resx
+!EntriesForm.cs
+!EntriesForm.Designer.cs
+!EntriesForm.resx
+!EntryForm.cs
+!EntryForm.Designer.cs
+!EntryForm.resx
+
+!Properties/
+!Properties/**
+!Properties/Resources.resx
+!Properties/Resources.Designer.cs
+
+!update.json
