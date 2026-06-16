@@ -164,6 +164,12 @@ namespace csharp_michels_database
         {
             dataGridView1.Rows.Clear();
 
+            draftContents = draftContents
+                .OrderBy(c => c.PageStart)
+                .ThenBy(c => c.PageEnd)
+                .ThenBy(c => c.Title)
+                .ToList();
+
             foreach (EntryContent content in draftContents)
             {
                 string mainCategoryName = Main?.AppDatabase.GetCategoryName(content.MainCategoryId) ?? "";
