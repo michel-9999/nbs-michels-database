@@ -25,9 +25,6 @@ namespace csharp_michels_database
             "Pomologie",
             "Pomologie en internet",
         ];
-        public static readonly string[] DEFAULT_SUBJECTS = 
-        [
-            "Test Subject",
-        ];
+        public static readonly string[] DEFAULT_SUBJECTS = [];
     }
 }

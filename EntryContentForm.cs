@@ -36,6 +36,7 @@ namespace csharp_michels_database
         private ComboBox mainCategoryComboBox = new ComboBox();
         private CheckedListBox subjectsCheckedListBox = new CheckedListBox();
         private Button addSubjectButton = new Button();
+        private TextBox commentTextBox = new TextBox();
         private Button saveButton = new Button();
         private Button closeButton = new Button();
 
@@ -55,14 +56,14 @@ namespace csharp_michels_database
         private void BuildInterface()
         {
             Text = "Inhoud bewerken";
-            Width = 800;
-            Height = 600;
+            Width = 1200;
+            Height = 800;
 
             TableLayoutPanel table = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 ColumnCount = 2,
-                RowCount = 6,
+                RowCount = 7,
                 Padding = new Padding(12)
             };
 
@@ -74,6 +75,7 @@ namespace csharp_michels_database
             table.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
             table.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
             table.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            table.RowStyles.Add(new RowStyle(SizeType.Absolute, 100));
             table.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
 
             Label titleLabel = new Label
@@ -114,7 +116,7 @@ namespace csharp_michels_database
 
             Label mainCategoryLabel = new Label
             {
-                Text = "Hoofdcategorie",
+                Text = "Categorie",
                 Dock = DockStyle.Fill,
                 TextAlign = System.Drawing.ContentAlignment.MiddleLeft
             };
@@ -156,6 +158,20 @@ namespace csharp_michels_database
             subjectsPanel.Controls.Add(subjectsCheckedListBox, 0, 0);
             subjectsPanel.Controls.Add(addSubjectButton, 1, 0);
 
+            Label commentLabel = new Label
+            {
+                Text = "Notities",
+                Dock = DockStyle.Fill,
+                TextAlign = System.Drawing.ContentAlignment.TopLeft
+            };
+
+            commentTextBox.Dock = DockStyle.Fill;
+            commentTextBox.Multiline = true;
+            commentTextBox.ScrollBars = ScrollBars.Vertical;
+            commentTextBox.AcceptsReturn = true;
+            commentTextBox.AcceptsTab = true;
+            commentTextBox.TextChanged += MarkModified;
+
             FlowLayoutPanel buttonPanel = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
@@ -190,7 +206,10 @@ namespace csharp_michels_database
             table.Controls.Add(subjectsLabel, 0, 4);
             table.Controls.Add(subjectsPanel, 1, 4);
 
-            table.Controls.Add(buttonPanel, 1, 5);
+            table.Controls.Add(commentLabel, 0, 5);
+            table.Controls.Add(commentTextBox, 1, 5);
+
+            table.Controls.Add(buttonPanel, 1, 6);
 
             Controls.Add(table);
         }
@@ -204,6 +223,7 @@ namespace csharp_michels_database
                 : $"Inhoud bewerken - {Content.Title}";
 
             titleTextBox.Text = Content.Title;
+            commentTextBox.Text = Content.Comment ?? "";
             pageStartNumericUpDown.Value = ClampToNumericUpDown(Content.PageStart, pageStartNumericUpDown);
             pageEndNumericUpDown.Value = ClampToNumericUpDown(Content.PageEnd, pageEndNumericUpDown);
 
@@ -419,6 +439,7 @@ namespace csharp_michels_database
             Content.Title = title;
             Content.PageStart = pageStart;
             Content.PageEnd = pageEnd;
+            Content.Comment = commentTextBox.Text;
             Content.MainCategoryId = GetSelectedMainCategoryId();
 
             List<Guid> selectedSubjectIds = [];
@@ -472,6 +493,7 @@ namespace csharp_michels_database
                 Title = source.Title,
                 PageStart = source.PageStart,
                 PageEnd = source.PageEnd,
+                Comment = source.Comment ?? "",
                 MainCategoryId = source.MainCategoryId,
                 SubjectIds = source.SubjectIds?.ToList() ?? []
             };

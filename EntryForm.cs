@@ -85,6 +85,7 @@ namespace csharp_michels_database
                 Title = source.Title,
                 PageStart = source.PageStart,
                 PageEnd = source.PageEnd,
+                Comment = source.Comment ?? "",
                 MainCategoryId = source.MainCategoryId,
                 SubjectIds = source.SubjectIds?.ToList() ?? []
             };
@@ -134,7 +135,7 @@ namespace csharp_michels_database
             dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "MainCategoryColumn",
-                HeaderText = "Hoofdcategorie",
+                HeaderText = "Categorie",
                 Width = 180
             });
 
