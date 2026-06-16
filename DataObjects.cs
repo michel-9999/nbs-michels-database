@@ -49,7 +49,7 @@ namespace csharp_michels_database
 
         public Guid? MainCategoryId { get; set; }
 
-        public List<Guid> SubCategoryIds { get; set; } = [];
+        public List<Guid> SubjectIds { get; set; } = [];
     }
 
     public class ContentCategory
