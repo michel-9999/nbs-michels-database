@@ -55,10 +55,9 @@ namespace csharp_michels_database
         public string Title { get; set; } = "";
         public int PageStart { get; set; }
         public int PageEnd { get; set; }
-
         public Guid? MainCategoryId { get; set; }
-
         public List<Guid> SubjectIds { get; set; } = [];
+        public string Comment { get; set; } = "";
     }
 
     public class ContentCategory

@@ -24,6 +24,8 @@ namespace csharp_michels_database
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public List<ContentSubject> Subjects { get; set; } = [];
 
+        private MainForm? Main => MdiParent as MainForm;
+
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public event Action<EntryContent>? ContentSaved;
@@ -33,6 +35,7 @@ namespace csharp_michels_database
         private NumericUpDown pageEndNumericUpDown = new NumericUpDown();
         private ComboBox mainCategoryComboBox = new ComboBox();
         private CheckedListBox subjectsCheckedListBox = new CheckedListBox();
+        private Button addSubjectButton = new Button();
         private Button saveButton = new Button();
         private Button closeButton = new Button();
 
@@ -132,6 +135,27 @@ namespace csharp_michels_database
             subjectsCheckedListBox.IntegralHeight = false;
             subjectsCheckedListBox.ItemCheck += subjectsCheckedListBox_ItemCheck;
 
+            addSubjectButton.Text = "+";
+            addSubjectButton.Width = 40;
+            addSubjectButton.Height = 32;
+            addSubjectButton.Dock = DockStyle.Top;
+            addSubjectButton.Click += addSubjectButton_Click;
+
+            TableLayoutPanel subjectsPanel = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 2,
+                RowCount = 1,
+                Margin = new Padding(0)
+            };
+
+            subjectsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            subjectsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 46));
+            subjectsPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+
+            subjectsPanel.Controls.Add(subjectsCheckedListBox, 0, 0);
+            subjectsPanel.Controls.Add(addSubjectButton, 1, 0);
+
             FlowLayoutPanel buttonPanel = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
@@ -164,7 +188,7 @@ namespace csharp_michels_database
             table.Controls.Add(mainCategoryComboBox, 1, 3);
 
             table.Controls.Add(subjectsLabel, 0, 4);
-            table.Controls.Add(subjectsCheckedListBox, 1, 4);
+            table.Controls.Add(subjectsPanel, 1, 4);
 
             table.Controls.Add(buttonPanel, 1, 5);
 
@@ -251,6 +275,88 @@ namespace csharp_michels_database
         private void subjectsCheckedListBox_ItemCheck(object? sender, ItemCheckEventArgs e)
         {
             modified = true;
+        }
+
+        private void addSubjectButton_Click(object? sender, EventArgs e)
+        {
+            if (!InputDialogBox.Show("Onderwerp toevoegen", "Naam van nieuw onderwerp:", out string subjectName))
+                return;
+
+            subjectName = subjectName.Trim();
+
+            if (subjectName == "")
+            {
+                MessageBox.Show(
+                    "Onderwerp naam mag niet leeg zijn!",
+                    "Onderwerp toevoegen",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+
+                return;
+            }
+
+            ContentSubject? subject = FindSubjectByName(subjectName);
+
+            if (subject == null)
+            {
+                subject = new ContentSubject
+                {
+                    Id = Guid.NewGuid(),
+                    SubjectName = subjectName
+                };
+
+                Main?.AppDatabase.Subjects.Add(subject);
+
+                if (!Subjects.Any(s => s.Id == subject.Id))
+                    Subjects.Add(subject);
+
+                Main?.SaveDatabase();
+                Main?.BroadcastRefresh();
+            }
+            else if (!Subjects.Any(s => s.Id == subject.Id))
+            {
+                Subjects.Add(subject);
+            }
+
+            AddOrCheckSubjectInList(subject);
+
+            modified = true;
+        }
+
+        private ContentSubject? FindSubjectByName(string subjectName)
+        {
+            ContentSubject? localSubject = Subjects.FirstOrDefault(s =>
+                string.Equals(s.SubjectName, subjectName, StringComparison.OrdinalIgnoreCase)
+            );
+
+            if (localSubject != null)
+                return localSubject;
+
+            return Main?.AppDatabase.Subjects.FirstOrDefault(s =>
+                string.Equals(s.SubjectName, subjectName, StringComparison.OrdinalIgnoreCase)
+            );
+        }
+
+        private void AddOrCheckSubjectInList(ContentSubject subject)
+        {
+            for (int i = 0; i < subjectsCheckedListBox.Items.Count; i++)
+            {
+                if (subjectsCheckedListBox.Items[i] is SubjectComboItem item &&
+                    item.Id == subject.Id)
+                {
+                    subjectsCheckedListBox.SetItemChecked(i, true);
+                    subjectsCheckedListBox.SelectedIndex = i;
+                    return;
+                }
+            }
+
+            int newIndex = subjectsCheckedListBox.Items.Add(
+                new SubjectComboItem(subject.Id, subject.SubjectName),
+                true
+            );
+
+            subjectsCheckedListBox.SelectedIndex = newIndex;
         }
 
         private Guid? GetSelectedMainCategoryId()
