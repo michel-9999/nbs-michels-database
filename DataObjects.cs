@@ -25,9 +25,18 @@ namespace csharp_michels_database
 
             return Categories.FirstOrDefault(c => c.Id == id.Value)?.CategoryName ?? "";
         }
+
+        public string GetSubjectName(Guid? id)
+        {
+            if (id == null)
+                return "";
+
+            return Subjects.FirstOrDefault(s => s.Id == id.Value)?.SubjectName ?? "";
+        }
+
         public List<CollectionEntry> Entries { get; set; } = [];
         public List<ContentCategory> Categories { get; set; } = [];
-        public List <ContentSubject> Subjects { get; set; } = [];
+        public List<ContentSubject> Subjects { get; set; } = [];
     }
 
     public class CollectionEntry

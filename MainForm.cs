@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
 using System.Security.Policy;
 using System.Text.Json;
@@ -140,6 +140,7 @@ namespace csharp_michels_database
             {
                 AppDatabase = LoadDatabase();
                 EnsureStandardCategoriesExist();
+                EnsureStandardSubjectsExist();
                 SaveDatabase();
                 ShowEntriesForm();
             }
@@ -158,6 +159,24 @@ namespace csharp_michels_database
                     AppDatabase.Categories.Add(new ContentCategory
                     {
                         CategoryName = categoryName
+                    });
+                }
+            }
+        }
+
+        private void EnsureStandardSubjectsExist()
+        {
+            foreach (string subjectName in Standaard_Waarden.DEFAULT_SUBJECTS)
+            {
+                bool exists = AppDatabase.Subjects.Any(s =>
+                    string.Equals(s.SubjectName, subjectName, StringComparison.OrdinalIgnoreCase)
+                );
+
+                if (!exists)
+                {
+                    AppDatabase.Subjects.Add(new ContentSubject
+                    {
+                        SubjectName = subjectName
                     });
                 }
             }

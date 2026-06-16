@@ -86,7 +86,7 @@ namespace csharp_michels_database
                 PageStart = source.PageStart,
                 PageEnd = source.PageEnd,
                 MainCategoryId = source.MainCategoryId,
-                SubCategoryIds = source.SubCategoryIds.ToList()
+                SubjectIds = source.SubjectIds?.ToList() ?? []
             };
         }
 
@@ -550,7 +550,8 @@ namespace csharp_michels_database
                 MdiParent = Main,
                 ParentEntryId = Entry.Id,
                 Content = CloneEntryContent(content),
-                Categories = Main.AppDatabase.Categories.ToList()
+                Categories = Main.AppDatabase.Categories.ToList(),
+                Subjects = Main.AppDatabase.Subjects.ToList()
             };
 
             form.ContentSaved += EntryContentForm_ContentSaved;

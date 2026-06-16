@@ -113,9 +113,6 @@ namespace csharp_michels_database
                 {
                     if (content.MainCategoryId == categoryId)
                         count++;
-
-                    if (content.SubCategoryIds.Contains(categoryId))
-                        count++;
                 }
             }
 
@@ -249,8 +246,6 @@ namespace csharp_michels_database
                 {
                     if (content.MainCategoryId == category.Id)
                         content.MainCategoryId = null;
-
-                    content.SubCategoryIds.RemoveAll(id => id == category.Id);
                 }
             }
 

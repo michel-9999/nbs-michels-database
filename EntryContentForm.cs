@@ -22,13 +22,17 @@ namespace csharp_michels_database
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public List<ContentSubject> Subjects { get; set; } = [];
+
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public event Action<EntryContent>? ContentSaved;
 
         private TextBox titleTextBox = new TextBox();
         private NumericUpDown pageStartNumericUpDown = new NumericUpDown();
         private NumericUpDown pageEndNumericUpDown = new NumericUpDown();
         private ComboBox mainCategoryComboBox = new ComboBox();
-        private CheckedListBox subCategoriesCheckedListBox = new CheckedListBox();
+        private CheckedListBox subjectsCheckedListBox = new CheckedListBox();
         private Button saveButton = new Button();
         private Button closeButton = new Button();
 
@@ -116,17 +120,17 @@ namespace csharp_michels_database
             mainCategoryComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             mainCategoryComboBox.SelectedIndexChanged += mainCategoryComboBox_SelectedIndexChanged;
 
-            Label subCategoriesLabel = new Label
+            Label subjectsLabel = new Label
             {
-                Text = "Subcategorieën",
+                Text = "Onderwerpen",
                 Dock = DockStyle.Fill,
                 TextAlign = System.Drawing.ContentAlignment.TopLeft
             };
 
-            subCategoriesCheckedListBox.Dock = DockStyle.Fill;
-            subCategoriesCheckedListBox.CheckOnClick = true;
-            subCategoriesCheckedListBox.IntegralHeight = false;
-            subCategoriesCheckedListBox.ItemCheck += subCategoriesCheckedListBox_ItemCheck;
+            subjectsCheckedListBox.Dock = DockStyle.Fill;
+            subjectsCheckedListBox.CheckOnClick = true;
+            subjectsCheckedListBox.IntegralHeight = false;
+            subjectsCheckedListBox.ItemCheck += subjectsCheckedListBox_ItemCheck;
 
             FlowLayoutPanel buttonPanel = new FlowLayoutPanel
             {
@@ -159,8 +163,8 @@ namespace csharp_michels_database
             table.Controls.Add(mainCategoryLabel, 0, 3);
             table.Controls.Add(mainCategoryComboBox, 1, 3);
 
-            table.Controls.Add(subCategoriesLabel, 0, 4);
-            table.Controls.Add(subCategoriesCheckedListBox, 1, 4);
+            table.Controls.Add(subjectsLabel, 0, 4);
+            table.Controls.Add(subjectsCheckedListBox, 1, 4);
 
             table.Controls.Add(buttonPanel, 1, 5);
 
@@ -169,7 +173,7 @@ namespace csharp_michels_database
 
         private void LoadContentIntoForm()
         {
-            Content.SubCategoryIds ??= [];
+            Content.SubjectIds ??= [];
 
             Text = string.IsNullOrWhiteSpace(Content.Title)
                 ? "Nieuwe inhoud"
@@ -179,7 +183,7 @@ namespace csharp_michels_database
             pageStartNumericUpDown.Value = ClampToNumericUpDown(Content.PageStart, pageStartNumericUpDown);
             pageEndNumericUpDown.Value = ClampToNumericUpDown(Content.PageEnd, pageEndNumericUpDown);
 
-            LoadCategoriesIntoControls();
+            LoadCategoriesAndSubjectsIntoControls();
 
             modified = false;
         }
@@ -195,10 +199,10 @@ namespace csharp_michels_database
             return value;
         }
 
-        private void LoadCategoriesIntoControls()
+        private void LoadCategoriesAndSubjectsIntoControls()
         {
             mainCategoryComboBox.Items.Clear();
-            subCategoriesCheckedListBox.Items.Clear();
+            subjectsCheckedListBox.Items.Clear();
 
             mainCategoryComboBox.Items.Add(new CategoryComboItem(null, "(geen categorie)"));
 
@@ -209,13 +213,6 @@ namespace csharp_michels_database
             foreach (ContentCategory category in orderedCategories)
             {
                 mainCategoryComboBox.Items.Add(new CategoryComboItem(category.Id, category.CategoryName));
-
-                bool isSubCategory = Content.SubCategoryIds.Contains(category.Id);
-
-                subCategoriesCheckedListBox.Items.Add(
-                    new CategoryComboItem(category.Id, category.CategoryName),
-                    isSubCategory
-                );
             }
 
             for (int i = 0; i < mainCategoryComboBox.Items.Count; i++)
@@ -224,42 +221,36 @@ namespace csharp_michels_database
                     item.Id == Content.MainCategoryId)
                 {
                     mainCategoryComboBox.SelectedIndex = i;
-                    UncheckSelectedMainCategoryInSubCategories();
-                    return;
+                    break;
                 }
             }
 
-            mainCategoryComboBox.SelectedIndex = 0;
-            UncheckSelectedMainCategoryInSubCategories();
+            if (mainCategoryComboBox.SelectedIndex < 0)
+                mainCategoryComboBox.SelectedIndex = 0;
+
+            List<ContentSubject> orderedSubjects = Subjects
+                .OrderBy(s => s.SubjectName)
+                .ToList();
+
+            foreach (ContentSubject subject in orderedSubjects)
+            {
+                bool isSelectedSubject = Content.SubjectIds.Contains(subject.Id);
+
+                subjectsCheckedListBox.Items.Add(
+                    new SubjectComboItem(subject.Id, subject.SubjectName),
+                    isSelectedSubject
+                );
+            }
         }
 
         private void mainCategoryComboBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            UncheckSelectedMainCategoryInSubCategories();
             modified = true;
         }
 
-        private void subCategoriesCheckedListBox_ItemCheck(object? sender, ItemCheckEventArgs e)
+        private void subjectsCheckedListBox_ItemCheck(object? sender, ItemCheckEventArgs e)
         {
             modified = true;
-        }
-
-        private void UncheckSelectedMainCategoryInSubCategories()
-        {
-            Guid? mainCategoryId = GetSelectedMainCategoryId();
-
-            if (mainCategoryId == null)
-                return;
-
-            for (int i = 0; i < subCategoriesCheckedListBox.Items.Count; i++)
-            {
-                if (subCategoriesCheckedListBox.Items[i] is CategoryComboItem item &&
-                    item.Id == mainCategoryId.Value)
-                {
-                    subCategoriesCheckedListBox.SetItemChecked(i, false);
-                    return;
-                }
-            }
         }
 
         private Guid? GetSelectedMainCategoryId()
@@ -319,26 +310,22 @@ namespace csharp_michels_database
                 return false;
             }
 
-            Guid? mainCategoryId = GetSelectedMainCategoryId();
-
             Content.Title = title;
             Content.PageStart = pageStart;
             Content.PageEnd = pageEnd;
-            Content.MainCategoryId = mainCategoryId;
+            Content.MainCategoryId = GetSelectedMainCategoryId();
 
-            List<Guid> selectedSubCategoryIds = [];
+            List<Guid> selectedSubjectIds = [];
 
-            foreach (object checkedItem in subCategoriesCheckedListBox.CheckedItems)
+            foreach (object checkedItem in subjectsCheckedListBox.CheckedItems)
             {
-                if (checkedItem is CategoryComboItem categoryItem &&
-                    categoryItem.Id != null &&
-                    categoryItem.Id != mainCategoryId)
+                if (checkedItem is SubjectComboItem subjectItem)
                 {
-                    selectedSubCategoryIds.Add(categoryItem.Id.Value);
+                    selectedSubjectIds.Add(subjectItem.Id);
                 }
             }
 
-            Content.SubCategoryIds = selectedSubCategoryIds
+            Content.SubjectIds = selectedSubjectIds
                 .Distinct()
                 .ToList();
 
@@ -380,7 +367,7 @@ namespace csharp_michels_database
                 PageStart = source.PageStart,
                 PageEnd = source.PageEnd,
                 MainCategoryId = source.MainCategoryId,
-                SubCategoryIds = source.SubCategoryIds?.ToList() ?? []
+                SubjectIds = source.SubjectIds?.ToList() ?? []
             };
         }
 
@@ -390,6 +377,23 @@ namespace csharp_michels_database
             public string Name { get; }
 
             public CategoryComboItem(Guid? id, string name)
+            {
+                Id = id;
+                Name = name;
+            }
+
+            public override string ToString()
+            {
+                return Name;
+            }
+        }
+
+        private class SubjectComboItem
+        {
+            public Guid Id { get; }
+            public string Name { get; }
+
+            public SubjectComboItem(Guid id, string name)
             {
                 Id = id;
                 Name = name;
