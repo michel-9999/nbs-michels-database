@@ -110,6 +110,28 @@ namespace csharp_michels_database
 
             categoriesForm.Show();
         }
+
+        private void ShowSubjectsForm()
+        {
+            if (_appLockInEffect)
+                return;
+
+            foreach (Form child in this.MdiChildren)
+            {
+                if (child is SubjectsForm)
+                {
+                    child.Activate(); // Bring existing form to front
+                    return;
+                }
+            }
+
+            SubjectsForm subjectsForm = new SubjectsForm
+            {
+                MdiParent = this
+            };
+
+            subjectsForm.Show();
+        }
         private async void MainForm_Load(object? sender, EventArgs e)
         {
             await CheckForUpdateAsync();
@@ -540,6 +562,11 @@ namespace csharp_michels_database
                 SaveDatabase();
                 BroadcastRefresh();
             }
+        }
+
+        private void lijstOnderwerpenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowSubjectsForm();
         }
     }
 

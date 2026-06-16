@@ -42,14 +42,14 @@
             toevoegenToolStripMenuItem = new ToolStripMenuItem();
             categorieToevoegenToolStripMenuItem = new ToolStripMenuItem();
             categoryToolStripMenuItem = new ToolStripMenuItem();
+            onderwerpenToolStripMenuItem = new ToolStripMenuItem();
+            onderwerpToevoegenToolStripMenuItem = new ToolStripMenuItem();
+            lijstOnderwerpenToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             downloadPaginaToolStripMenuItem = new ToolStripMenuItem();
             openApplicatieFolderToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             overToolStripMenuItem = new ToolStripMenuItem();
-            onderwerpenToolStripMenuItem = new ToolStripMenuItem();
-            onderwerpToevoegenToolStripMenuItem = new ToolStripMenuItem();
-            lijstOnderwerpenToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -155,6 +155,27 @@
             categoryToolStripMenuItem.Text = "Lijst Categorieën";
             categoryToolStripMenuItem.Click += categoryToolStripMenuItem_Click;
             // 
+            // onderwerpenToolStripMenuItem
+            // 
+            onderwerpenToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { onderwerpToevoegenToolStripMenuItem, lijstOnderwerpenToolStripMenuItem });
+            onderwerpenToolStripMenuItem.Name = "onderwerpenToolStripMenuItem";
+            onderwerpenToolStripMenuItem.Size = new Size(136, 29);
+            onderwerpenToolStripMenuItem.Text = "Onderwerpen";
+            // 
+            // onderwerpToevoegenToolStripMenuItem
+            // 
+            onderwerpToevoegenToolStripMenuItem.Name = "onderwerpToevoegenToolStripMenuItem";
+            onderwerpToevoegenToolStripMenuItem.Size = new Size(294, 34);
+            onderwerpToevoegenToolStripMenuItem.Text = "Onderwerp Toevoegen";
+            onderwerpToevoegenToolStripMenuItem.Click += onderwerpToevoegenToolStripMenuItem_Click;
+            // 
+            // lijstOnderwerpenToolStripMenuItem
+            // 
+            lijstOnderwerpenToolStripMenuItem.Name = "lijstOnderwerpenToolStripMenuItem";
+            lijstOnderwerpenToolStripMenuItem.Size = new Size(294, 34);
+            lijstOnderwerpenToolStripMenuItem.Text = "Lijst Onderwerpen";
+            lijstOnderwerpenToolStripMenuItem.Click += lijstOnderwerpenToolStripMenuItem_Click;
+            // 
             // helpToolStripMenuItem
             // 
             helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { downloadPaginaToolStripMenuItem, openApplicatieFolderToolStripMenuItem, toolStripSeparator2, overToolStripMenuItem });
@@ -187,26 +208,6 @@
             overToolStripMenuItem.Size = new Size(296, 34);
             overToolStripMenuItem.Text = "Over...";
             overToolStripMenuItem.Click += overToolStripMenuItem_Click;
-            // 
-            // onderwerpenToolStripMenuItem
-            // 
-            onderwerpenToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { onderwerpToevoegenToolStripMenuItem, lijstOnderwerpenToolStripMenuItem });
-            onderwerpenToolStripMenuItem.Name = "onderwerpenToolStripMenuItem";
-            onderwerpenToolStripMenuItem.Size = new Size(136, 29);
-            onderwerpenToolStripMenuItem.Text = "Onderwerpen";
-            // 
-            // onderwerpToevoegenToolStripMenuItem
-            // 
-            onderwerpToevoegenToolStripMenuItem.Name = "onderwerpToevoegenToolStripMenuItem";
-            onderwerpToevoegenToolStripMenuItem.Size = new Size(294, 34);
-            onderwerpToevoegenToolStripMenuItem.Text = "Onderwerp Toevoegen";
-            onderwerpToevoegenToolStripMenuItem.Click += onderwerpToevoegenToolStripMenuItem_Click;
-            // 
-            // lijstOnderwerpenToolStripMenuItem
-            // 
-            lijstOnderwerpenToolStripMenuItem.Name = "lijstOnderwerpenToolStripMenuItem";
-            lijstOnderwerpenToolStripMenuItem.Size = new Size(294, 34);
-            lijstOnderwerpenToolStripMenuItem.Text = "Lijst Onderwerpen";
             // 
             // MainForm
             // 
