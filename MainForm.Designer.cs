@@ -49,6 +49,7 @@
             downloadPaginaToolStripMenuItem = new ToolStripMenuItem();
             openApplicatieFolderToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
+            michelsWebsiteToolStripMenuItem = new ToolStripMenuItem();
             overToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -178,7 +179,7 @@
             // 
             // helpToolStripMenuItem
             // 
-            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { downloadPaginaToolStripMenuItem, openApplicatieFolderToolStripMenuItem, toolStripSeparator2, overToolStripMenuItem });
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { downloadPaginaToolStripMenuItem, openApplicatieFolderToolStripMenuItem, toolStripSeparator2, michelsWebsiteToolStripMenuItem, overToolStripMenuItem });
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             helpToolStripMenuItem.Size = new Size(65, 29);
             helpToolStripMenuItem.Text = "Help";
@@ -201,6 +202,13 @@
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
             toolStripSeparator2.Size = new Size(293, 6);
+            // 
+            // michelsWebsiteToolStripMenuItem
+            // 
+            michelsWebsiteToolStripMenuItem.Name = "michelsWebsiteToolStripMenuItem";
+            michelsWebsiteToolStripMenuItem.Size = new Size(296, 34);
+            michelsWebsiteToolStripMenuItem.Text = "Michel's Website";
+            michelsWebsiteToolStripMenuItem.Click += michelsWebsiteToolStripMenuItem_Click;
             // 
             // overToolStripMenuItem
             // 
@@ -254,5 +262,6 @@
         private ToolStripMenuItem onderwerpenToolStripMenuItem;
         private ToolStripMenuItem onderwerpToevoegenToolStripMenuItem;
         private ToolStripMenuItem lijstOnderwerpenToolStripMenuItem;
+        private ToolStripMenuItem michelsWebsiteToolStripMenuItem;
     }
 }

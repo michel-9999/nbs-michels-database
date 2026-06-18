@@ -587,6 +587,11 @@ namespace csharp_michels_database
         {
             ShowSubjectsForm();
         }
+
+        private void michelsWebsiteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenUrl("https://cilissen.github.io/");
+        }
     }
 
 
